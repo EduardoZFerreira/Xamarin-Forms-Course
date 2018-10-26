@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:LayoutXF"
+             x:Class="LayoutXF.MainPage">
+
+    <StackLayout>
+        <Label Text="Selecione uma página para ver seu layout: " 
+           HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand" />
+        <Button Text="Absolute" Clicked="AbsoluteCall" />
+        <Button Text="Grid" Clicked="GridCall" />
+        <Button Text="Relative" Clicked="RelativeCall" />
+        <Button Text="Scroll" Clicked="ScrollCall" />
+        <Button Text="Stack" Clicked="StackCall" />
+    </StackLayout>
+
+</ContentPage>
