@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
-
+using Newtonsoft.Json;
 namespace Tarefas.Model
 {
     public static class Gerenciador
@@ -10,6 +10,7 @@ namespace Tarefas.Model
         private static List<Tarefa> tarefas = new List<Tarefa>();
         public static void Salvar(Tarefa tarefa)
         {
+            tarefas = Listar();
             tarefas.Add(tarefa);
             SalvarProps(tarefas);
         }
@@ -19,39 +20,44 @@ namespace Tarefas.Model
             return ListagemProps();
         }
 
-        public static void Finalizar(Tarefa tarefa)
+        public static void Finalizar(int index, Tarefa tarefa)
         {
+            tarefas = Listar();
             DateTime data = DateTime.Now;
-            if (tarefas.Contains(tarefa))
-            {
-                int ind = tarefas.IndexOf(tarefa);
-                tarefas[ind].DataFinalizacao = data;
-                SalvarProps(tarefas);
-            }
-            else
-                throw new Exception("A tarefa selecionada não existe!");
+            
+            tarefas[index].DataFinalizacao = data;
+            SalvarProps(tarefas);
         }
 
-        public static void Remover(Tarefa tarefa)
+        public static void Remover(int index, Tarefa tarefa)
         {
-            tarefas.Remove(tarefa);
+            tarefas = Listar();
+            tarefas.RemoveAt(index);
             SalvarProps(tarefas);
         }
 
         private static void SalvarProps(List<Tarefa> tarefas)
         {
+            
             if (App.Current.Properties.ContainsKey("Tarefas"))
             {
                 App.Current.Properties.Remove("Tarefas");
             }
-            App.Current.Properties.Add("Tarefas", tarefas);
+            
+            string JsonVal = JsonConvert.SerializeObject(tarefas);
+            
+            App.Current.Properties.Add("Tarefas", JsonVal);
         }
 
         private static List<Tarefa> ListagemProps()
         {
             if (App.Current.Properties.ContainsKey("Tarefas"))
             {
-                return (List<Tarefa>)App.Current.Properties["Tarefas"];
+                string JsonVal = (string)App.Current.Properties["Tarefas"];
+
+                List<Tarefa> lista = JsonConvert.DeserializeObject<List<Tarefa>>(JsonVal);
+
+                return lista;
             } else
                 return new List<Tarefa>();
         }
